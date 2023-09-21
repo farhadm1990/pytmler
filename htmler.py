@@ -1,7 +1,7 @@
 #installing dependiencies
 import importlib
 
-required_modules = ["jinja2", "datetime", "io", "base64", "os", "pandas", "numpy", "requests", "BeautifulSoup"]
+required_modules = ["jinja2", "datetime", "pandas", "numpy", "requests", "beautifulsoup4"]
 
 for md in required_modules:
     try:
@@ -23,6 +23,9 @@ import pandas as pd
 import numpy as np
 import requests
 from bs4 import BeautifulSoup
+
+
+
 
 
 class report_maker:

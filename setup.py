@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 
 setup(
@@ -8,8 +8,8 @@ setup(
     url='https://github.com/farhadm1990/htmler',
     author="Farhad M. Panah",
     author_email="farhad@food.ku.dk",
-    packages=["htmler"],
-    install_requires=["jinja2", "datetime", "io", "base64", "os", "pandas", "numpy", "requests", "BeautifulSoup"]
+    packages=find_packages(),
+    install_requires=["jinja2", "datetime", "pandas", "numpy", "requests", "beautifulsoup4"]
 
 )
 
