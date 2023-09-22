@@ -355,4 +355,4 @@ class report_maker:
         out = html.render()
         with open(f"{self.out_dir}/{self.out_name}.html", 'w') as output:
             output.write(out)
-        
+
