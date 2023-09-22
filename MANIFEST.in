@@ -1,0 +1,3 @@
+include *.py
+recursive-include dist *.gz
+recursive-include dist *.whl
