@@ -5,7 +5,7 @@
 
 ```python
 
-pip install --user git+https://github.com/farhadm1990/pytmler
+pip install --user git+https://github.com/farhadm1990/pytmler.git
 
 ```
 
@@ -29,7 +29,7 @@ html = htmler.report_maker(out_name="report_name",
                            out_dir="/output/dir", 
                            title="any titles", 
                            user="Farhad", 
-                           logo="./data/Ku-logo.png", header_color="black")
+                           logo="/path/to/any/logo.png | or url", header_color="black")
 
 ```
 
