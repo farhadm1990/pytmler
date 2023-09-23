@@ -5,7 +5,19 @@
 
 ```python
 
-pip install --user git+https://github.com/farhadm1990/pytmler.git
+pip install --user pytmler
+
+```
+
+Alternatively, you can download the latest version from this github page and install it locally:
+
+```python
+
+git clone https://github.com/farhadm1990/pytmler.git
+
+cd pytmler
+
+pip install .
 
 ```
 
@@ -25,7 +37,7 @@ from pytmler.htmler import report_maker
 ```python
 #create the empty file by running report_maker()
 
-html = htmler.report_maker(out_name="report_name", 
+html = report_maker(out_name="report_name", 
                            out_dir="/output/dir", 
                            title="any titles", 
                            user="Farhad", 
