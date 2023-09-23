@@ -1,6 +1,13 @@
 Metadata-Version: 2.1
 Name: pytmler
-Version: 0.0.1
+Version: 0.1.1
 Home-page: https://github.com/farhadm1990/pytmler
 Author: Farhad M. Panah
 Author-email: farhad@food.ku.dk
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: License :: OSI Approved :: GNU General Public License v3 (GPLv3)
+Classifier: Operating System :: OS Independent
+License-File: LICENCE.txt

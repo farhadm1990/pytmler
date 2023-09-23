@@ -1,5 +1,9 @@
+LICENCE.txt
 README.md
 setup.py
+dist/pytmler-0.1.1.tar.gz
+pytmler/__init__.py
+pytmler/htmler.py
 pytmler.egg-info/PKG-INFO
 pytmler.egg-info/SOURCES.txt
 pytmler.egg-info/dependency_links.txt
