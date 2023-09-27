@@ -1,7 +1,7 @@
 #installing dependiencies
 import importlib
 
-required_modules = ["jinja2", "datetime", "pandas", "numpy", "requests", "beautifulsoup4"]
+required_modules = ["jinja2", "datetime", "pandas", "numpy", "requests", "beautifulsoup4", "pygments"]
 
 for md in required_modules:
     try:
@@ -10,7 +10,7 @@ for md in required_modules:
         print(f"Installing {md}...")
         try:
             import subprocess
-            subprocess.check_call(["pip3", "install", md])
+            subprocess.check_call(["pip", "install", md])
         except Exception as e:
             print(f"Failed to install {md}: {e}")
 
@@ -23,6 +23,9 @@ import pandas as pd
 import numpy as np
 import requests
 from bs4 import BeautifulSoup
+from pygments import highlight
+from pygments.lexers import get_lexer_by_name
+from pygments.formatters import HtmlFormatter
 
 
 
@@ -58,11 +61,16 @@ class report_maker:
         <!DOCTYPE html>
         <html lang="en">
             <head>
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism.min.css">
                 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-                <link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css"></style>
                 <script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
                 <script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/plugins/autoloader/prism-autoloader.min.js"></script>
+                <script type="text/javascript" src="path/to/JSmol.min.js"></script>
+                <script type="text/javascript" src="path/to/JSmolCore.js"></script>
 
                 <style>
                     body {
@@ -238,7 +246,6 @@ class report_maker:
                 <!-- element_loc -->
             
                 
-                
             </body>
             <script>
                 $(document).ready(function() {
@@ -260,13 +267,27 @@ class report_maker:
                 });
 
             </script>
+            <script>
+            function copyToClipboard(element) {
+                var $temp = $("<input>");
+                $("body").append($temp);
+                $temp.val($(element).text()).select();
+                document.execCommand("copy");
+                $temp.remove();
+            }
+
+            
+            $(".copy-button").click(function() {
+                var codeElement = $(this).siblings("pre"); 
+                copyToClipboard(codeElement);
+            });
+        </script>
+
         </html>
 
         """
 
         template = Template(html_template) 
-        #env = Environment(loader=FileSystemLoader(self.out_dir))
-        #template = env.get_template(self.html_template)
         date = datetime.datetime.now().strftime("%Y-%m-%d")
 
 
@@ -284,9 +305,14 @@ class report_maker:
 
     #plot adder
     def plot_add(self, plot: str, id: str, fignumber: str, plotcaption: str, height: int, width: int) -> None:
+        #If plot is an external object
         if os.path.isfile(plot):
             with open(plot, 'rb') as p:
-                plot = base64.b64encode(p.read()).decode()
+                 plot = base64.b64encode(p.read()).decode()
+        # elif is_valid_url(plot):
+        #         plot = plot
+        #     else:
+        #         raise TypeError("Error: your plot must be either a vlid URL, pyplot or a png file!")
 
         plot_div = str('<div id="{{ id }}" class="output-plot"><div class="plot-div"><h3>{{ fignumber }}</h3><p>{{ plotcaption }}</p><img style="height: {{ height }}px; width: {{ width }}px;" class="long-plot" src="data:image/png;base64,{{ plot }}" alt="{{ plotcaption }}" /></div> </div> \n        <!-- element_loc -->')
 
@@ -308,7 +334,7 @@ class report_maker:
     #Table adder
     def table_add(self, table: str, id: str, tabnumber: str, tabpaction: str) -> None:
         
-        tab_div = str('<div id="{{ id }}" class="tabdiv" ><div class="table-title"><h3 style="display: flex; margin-bottom: 0;">{{ tabnumber }}</h1><p>{{ tabcaption }}</p><br></div><table id="table" class="display" cellspacing="0"><thead><tr>{% for column in table.columns %}<th>{{ column }}</th>{% endfor %}</tr></thead><tbody>{% for row in table.values %}<tr>{% for value in row %}<td>{{ value }}</td>{% endfor %}</tr>{% endfor %}</tbody></table></div> \n        <!-- element_loc -->')
+        tab_div = str('<div id="{{ id }}" class="tabdiv" ><div class="table-title"><h3 style="display: flex; margin-bottom: 0;">{{ tabnumber }}</h3><p>{{ tabcaption }}</p><br></div><table id="table" class="display" cellspacing="0"><thead><tr>{% for column in table.columns %}<th>{{ column }}</th>{% endfor %}</tr></thead><tbody>{% for row in table.values %}<tr>{% for value in row %}<td>{{ value }}</td>{% endfor %}</tr>{% endfor %}</tbody></table></div> \n        <!-- element_loc -->')
 
         env = Environment(loader=FileSystemLoader(self.out_dir))
         template = env.get_template(f"{self.out_dir}/{self.out_name}.html").render()
@@ -355,4 +381,72 @@ class report_maker:
         out = html.render()
         with open(f"{self.out_dir}/{self.out_name}.html", 'w') as output:
             output.write(out)
+        
+    #Code adder
+    def code_add(self, id: str, code_snippet: str, latex_enc: "python")  -> None:
+
+        lexer = get_lexer_by_name(latex_enc)
+
+        highlighted = highlight(code_snippet, lexer, HtmlFormatter())
+
+        code_div = """
+        <div class="code-container" id="{{ id }}" style="background-color: rgb(245, 245, 245); border: solid 0.05px rgb(150, 150, 150); border-radius: 5px; padding-bottom: 10px; padding-left: 10px; padding-top: 20px; margin-left: 10px; margin-right: 10px; margin-bottom: 20px; margin-top: 20px; position: relative; overflow-x: auto;">
+            
+            <pre class="language-javascript"><br>
+                <code><br>{{ highlighted }}<br></code><br>
+            </pre>
+            <button style="position: absolute; top: 5px; left: 5px;" class="copy-button" onclick="copyToClipboard({{ id }})">Copy</button>
+            
+        </div>
+        <!-- element_loc -->
+
+        """
+        env = Environment(loader=FileSystemLoader(self.out_dir))
+        template = env.get_template(f"{self.out_dir}/{self.out_name}.html").render()
+        temp = str(template).replace('<!-- element_loc -->', code_div)
+        template = Template(temp)
+
+        code_html = template.render(highlighted = highlighted,
+                                id = id   
+                                                             
+                                )
+        with open(f"{self.out_dir}/{self.out_name}.html", 'w') as out:
+            out.write(code_html)
+
+    #3D molecule
+    def TD_add(self, id: str, fignumber: str, plotcaption: str, height: int, width: int, cif_path: str)  -> None:
+        
+        with open(cif_path, 'r') as cif_file:
+            cif_content = cif_file.read()
+
+
+        td_div = f"""
+        <div id="{ id }" class="3d-molecule" style="height: { height }px; width: { width }px;"><h3>{ fignumber }</h3><p>{ plotcaption }</p> </div>
+        <script type="text/javascript">
+            var viewer = $3Dmol.createViewer($("#{ id }"), {{
+                width: { width },
+                height: { height }
+            }});
+            viewer.addModel('{ cif_content }', 'cif');
+            viewer.setStyle({{}});
+            viewer.zoomTo();
+            viewer.render();
+        </script>\n  
+        <!-- element_loc -->'
+
+        """
+        env = Environment(loader=FileSystemLoader(self.out_dir))
+        template = env.get_template(f"{self.out_dir}/{self.out_name}.html").render()
+        temp = str(template).replace('<!-- element_loc -->', td_div)
+        template = Template(temp)
+
+        code_html = template.render(height = height,
+                                    width = width,
+                                    fignumber = fignumber,
+                                    plotcaption = plotcaption,
+                                    id = id   
+                                                             
+                                )
+        with open(f"{self.out_dir}/{self.out_name}.html", 'w') as out:
+            out.write(code_html)
 

@@ -30,7 +30,7 @@ from pytmler.htmler import report_maker
 ```
 
 ### Instances
-`report_maker` is the main class of pytmler package that has four instances: `plot_add` to add plots, `table_add` to add tables, `text_add` to add body of texts, and `div_rm` to remove a certain element from your html report.
+`report_maker` is the main class of pytmler package that has four instances: `plot_add` to add plots, `table_add` to add tables, `text_add` to add body of texts, `cod_add` to add code snippets, and `div_rm` to remove a certain element from your html report.
 
 #### Example
 
