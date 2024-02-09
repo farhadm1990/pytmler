@@ -1,4 +1,4 @@
-![logo](https://github.com/farhadm1990/pytmler/pix/logo.png)
+![logo](https://github.com/farhadm1990/pytmler/blob/main/pix/logo.png)
 
 # PyTmler
 
@@ -28,7 +28,7 @@ pip install .
 
 ```python
 
-from pytmler.htmler import report_maker
+from pytmler.pytmler import report_maker
 
 ```
 
