@@ -1,4 +1,4 @@
-![logo]("https://github.com/farhadm1990/pytmler/pix/logo.png")
+![logo](https://github.com/farhadm1990/pytmler/pix/logo.png)
 
 # PyTmler
 
