@@ -2,8 +2,8 @@ LICENCE.txt
 MANIFEST.in
 README.md
 setup.py
-dist/pytmler-0.1.2-py3-none-any.whl
-dist/pytmler-0.1.2.tar.gz
+pytmler/__init__.py
+pytmler/pytmler.py
 pytmler.egg-info/PKG-INFO
 pytmler.egg-info/SOURCES.txt
 pytmler.egg-info/dependency_links.txt

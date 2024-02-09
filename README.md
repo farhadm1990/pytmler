@@ -1,4 +1,7 @@
-# HTMLER 
+![logo]("https://github.com/farhadm1990/pytmler/pix/logo.png")
+
+# PyTmler
+
 ## A tiny python package to create shinny html report directly from python outputs. 
 
 ### Installation
@@ -42,6 +45,18 @@ html = report_maker(out_name="report_name",
                            title="any titles", 
                            user="Farhad", 
                            logo="/path/to/any/logo.png | or url", header_color="black")
+
+```
+
+```python
+# Adding elements to the html class object.
+
+html.plot_add() #To add plots 
+html.text_add() #To add body of text
+html.table_add() #TO add tables
+html.code_add() #To add code chunks
+html.TD_add()   #To add protein 3D models.
+html.div_rm()   # To remove any of above-mentioned elements from your report.
 
 ```
 
